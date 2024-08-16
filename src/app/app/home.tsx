@@ -1,11 +1,6 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/vzB24HeuTsy
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
@@ -14,63 +9,89 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import axios from "axios"
+
+interface Quote {
+  id: string;
+  text: string;
+  author: string;
+  approved: boolean;
+}
 
 export default function Home() {
-  const [quotes, setQuotes] = useState([
-    {
-      id: 1,
-      text: "The only way to do great work is to love what you do. - Steve Jobs",
-      author: "Steve Jobs",
-      approved: true,
-    },
-    {
-      id: 2,
-      text: "Believe you can and you're halfway there. - Theodore Roosevelt",
-      author: "Theodore Roosevelt",
-      approved: true,
-    },
-    {
-      id: 3,
-      text: "Happiness is not something ready-made. It comes from your own actions. - Dalai Lama",
-      author: "Dalai Lama",
-      approved: false,
-    },
-  ])
-  const [currentQuote, setCurrentQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)])
-  const [newQuoteText, setNewQuoteText] = useState("")
-  const [newQuoteAuthor, setNewQuoteAuthor] = useState("")
-  const [adminView, setAdminView] = useState(false)
-  const [adminUsername, setAdminUsername] = useState("")
-  const [adminPassword, setAdminPassword] = useState("")
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [currentQuote, setCurrentQuote] = useState(null);
+  const [newQuoteText, setNewQuoteText] = useState("");
+  const [newQuoteAuthor, setNewQuoteAuthor] = useState("");
+  const [adminView, setAdminView] = useState(false);
+  const [adminUsername, setAdminUsername] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+
+  useEffect(() => {
+    const fetchJokes = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/firestore/Jokes');
+        setQuotes(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchJokes();
+  }, []);
+
+  useEffect(() => {
+    if (quotes.length > 0) {
+      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
+  }, [quotes]);
+
   const handleGetNewQuote = () => {
-    setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)])
-  }
-  const handleSubmitNewQuote = () => {
+    if (quotes.length > 0) {
+      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
+  };
+
+  const handleSubmitNewQuote = async () => {
     if (newQuoteText.trim() !== "" && newQuoteAuthor.trim() !== "") {
       const newQuote = {
-        id: quotes.length + 1,
+        id:(quotes.length + 1).toString(),
         text: newQuoteText,
         author: newQuoteAuthor,
         approved: false,
+      };
+      try {
+        const response = await axios.post('http://localhost:3001/firestore/Joke', newQuote);
+        if (response.status === 201 || response.status === 200) {
+          setQuotes([...quotes, { ...newQuote, id: response.data.id }]);
+        } else {
+          console.error('Failed to add joke');
+        }
+      } catch (error) {
+        console.error('Error occurred while adding joke:', error);
       }
-      setQuotes([...quotes, newQuote])
-      setNewQuoteText("")
-      setNewQuoteAuthor("")
+      setNewQuoteText("");
+      setNewQuoteAuthor("");
     }
-  }
+  };
+
   const handleAdminLogin = () => {
     if (adminUsername === "admin" && adminPassword === "password") {
-      setAdminView(true)
+      setAdminView(true);
     } else {
-      alert("Invalid username or password")
+      alert("Invalid username or password");
     }
-  }
-  const handleApproveQuote = (quoteId: any) => {
-    setQuotes(quotes.map((quote) => (quote.id === quoteId ? { ...quote, approved: true } : quote)))
-  }
-  const handleDeleteQuote = (quoteId: any) => {
-    setQuotes(quotes.filter((quote) => quote.id !== quoteId))
-  }
+  };
+
+  const handleApproveQuote = (quoteId: string) => {
+    setQuotes(quotes.map((quote) => (quote.id === quoteId ? { ...quote, approved: true } : quote)));
+  };
+
+  const handleDeleteQuote = (quoteId: string) => {
+    setQuotes(quotes.filter((quote) => quote.id !== quoteId));
+  };
+
+  if (!currentQuote) return <p>Loading...</p>;
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       {!adminView ? (
