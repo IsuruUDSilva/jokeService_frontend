@@ -122,8 +122,8 @@ const AdminView = ({
                             </TableHeader>
                             <TableBody>
                                 {quotes.map((quote ,index) => (
-                                    <TableRow key={quote.id} className='font-medium'>
-                                        <TableCell className='font-bold'>{index+1}</TableCell>
+                                    <TableRow key={quote.id} className='font-medium items-center text-center'>
+                                        <TableCell className='font-bold' >{index+1}</TableCell>
                                         <TableCell className='font-bold'>{quote.text}</TableCell>
                                         <TableCell className='font-bold'>{quote.author}</TableCell>
                                         <TableCell>
@@ -133,7 +133,7 @@ const AdminView = ({
                                                 <Badge variant="destructive" className='rounded-md h-8'>Pending</Badge>
                                             )}
                                         </TableCell>
-                                        <TableCell className='items-start justify-start flex gap-2'>
+                                        <TableCell className='items-center justify-start flex gap-2'>
                                             {!quote.approved && (
                                                 <Button onClick={() => handleApproveQuote(quote.id)} variant="outline" size="sm" className='bg-[#7F9F80]'>
                                                     Approve

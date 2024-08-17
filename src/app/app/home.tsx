@@ -100,19 +100,19 @@ export default function Home() {
   if (!currentQuote) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100" >
+    <div className="flex flex-col items-start ml-[20%] justify-center h-screen bg-gray-100" >
       <div
     className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 -z-40"
-    style={{ backgroundImage: 'url(/minion.jpg)' }}
+    style={{ backgroundImage: 'url(/minion3.jpg)' }}
   ></div>
       {!adminView ? (
-        <div className="bg-[#000] p-8 rounded-lg shadow-md w-full max-w-md relative z-10 ">
+        <div className="bg-[#000] p-8 rounded-lg shadow-md w-full max-w-md relative z-10 pb-10">
           <h1 className="text-2xl font-bold mb-4 text-[#fff]">Joke of the Day</h1>
           <div className="bg-gray-200 p-4 rounded-lg mb-4 text-[#fff]">
             <p className="text-lg">{currentQuote.text}</p>
             <p className="text-gray-500 mt-2">- {currentQuote.author}</p>
           </div>
-          <Button onClick={handleGetNewQuote} className="w-full">
+          <Button onClick={handleGetNewQuote} className="w-full  text-[#000] font-bold" variant='secondary'>
             Get New Joke
           </Button>
           <Separator className="my-4" />
@@ -124,17 +124,17 @@ export default function Home() {
               value={newQuoteText}
               onChange={(e) => setNewQuoteText(e.target.value)}
               placeholder="Enter your Joke here..."
-              className="w-full"
+              className="w-full text-[#000]"
             />
-            <Label htmlFor="quote-author">Author</Label>
+            <Label htmlFor="quote-author" className="mt-2">Author</Label>
             <Input
               id="quote-author"
               value={newQuoteAuthor}
               onChange={(e) => setNewQuoteAuthor(e.target.value)}
               placeholder="Enter the author's name..."
-              className="w-full"
+              className="w-full text-[#000]"
             />
-            <Button onClick={handleSubmitNewQuote} className="w-full">
+            <Button onClick={handleSubmitNewQuote} className="w-full mt-3 text-[#000] font-bold" variant='secondary'>
               Submit Joke
             </Button>
           </div>
