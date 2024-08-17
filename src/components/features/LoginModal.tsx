@@ -36,7 +36,7 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4">
+    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4 bg-[#fff]">
       <h2 className="text-xl font-bold mb-4">Admin Login</h2>
       <div className="grid gap-2">
         <Label htmlFor="admin-username">Username</Label>
@@ -45,7 +45,7 @@ export default function LoginModal() {
           value={adminUsername}
           onChange={(e) => setAdminUsername(e.target.value)}
           placeholder="Enter your username..."
-          className="w-full"
+          className="w-full mb-3" 
         />
         <Label htmlFor="admin-password">Password</Label>
         <Input
@@ -54,9 +54,9 @@ export default function LoginModal() {
           value={adminPassword}
           onChange={(e) => setAdminPassword(e.target.value)}
           placeholder="Enter your password..."
-          className="w-full"
+          className="w-full mb-3"
         />
-        <Button onClick={handleAdminLogin} className="w-full">
+        <Button onClick={handleAdminLogin} className="w-full mt-3">
           Login
         </Button>
       </div>

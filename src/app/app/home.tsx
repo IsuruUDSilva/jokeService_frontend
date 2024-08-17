@@ -13,6 +13,7 @@ import axios from "axios"
 import { auth } from '../../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import LoginModal from "@/components/features/LoginModal"
+import Link from "next/link"
 
 interface Quote {
   id: string;
@@ -99,26 +100,30 @@ export default function Home() {
   if (!currentQuote) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100" >
+      <div
+    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 -z-40"
+    style={{ backgroundImage: 'url(/minion.jpg)' }}
+  ></div>
       {!adminView ? (
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-4">Quote of the Day</h1>
-          <div className="bg-gray-200 p-4 rounded-lg mb-4">
+        <div className="bg-[#000] p-8 rounded-lg shadow-md w-full max-w-md relative z-10 ">
+          <h1 className="text-2xl font-bold mb-4 text-[#fff]">Joke of the Day</h1>
+          <div className="bg-gray-200 p-4 rounded-lg mb-4 text-[#fff]">
             <p className="text-lg">{currentQuote.text}</p>
             <p className="text-gray-500 mt-2">- {currentQuote.author}</p>
           </div>
           <Button onClick={handleGetNewQuote} className="w-full">
-            Get New Quote
+            Get New Joke
           </Button>
           <Separator className="my-4" />
-          <h2 className="text-xl font-bold mb-2">Submit a Quote</h2>
-          <div className="grid gap-2">
-            <Label htmlFor="quote-text">Quote</Label>
+          <h2 className="text-xl font-bold mb-2 text-[#fff]">Submit a Quote</h2>
+          <div className="text-[#fff] grid gap-2">
+            <Label htmlFor="quote-text">Joke</Label>
             <Textarea
               id="quote-text"
               value={newQuoteText}
               onChange={(e) => setNewQuoteText(e.target.value)}
-              placeholder="Enter your quote here..."
+              placeholder="Enter your Joke here..."
               className="w-full"
             />
             <Label htmlFor="quote-author">Author</Label>
@@ -130,121 +135,23 @@ export default function Home() {
               className="w-full"
             />
             <Button onClick={handleSubmitNewQuote} className="w-full">
-              Submit Quote
+              Submit Joke
             </Button>
           </div>
         </div>
       ) : (
-        // <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl">
-        //   <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
-        //   <Tabs defaultValue="quotes">
-        //     <TabsList>
-        //       <TabsTrigger value="quotes">Quotes</TabsTrigger>
-        //       <TabsTrigger value="new-quote">New Quote</TabsTrigger>
-        //     </TabsList>
-        //     <TabsContent value="quotes">
-        //       <Table>
-        //         <TableHeader>
-        //           <TableRow>
-        //             <TableHead>ID</TableHead>
-        //             <TableHead>Quote</TableHead>
-        //             <TableHead>Author</TableHead>
-        //             <TableHead>Approved</TableHead>
-        //             <TableHead>Actions</TableHead>
-        //           </TableRow>
-        //         </TableHeader>
-        //         <TableBody>
-        //           {quotes.map((quote) => (
-        //             <TableRow key={quote.id}>
-        //               <TableCell>{quote.id}</TableCell>
-        //               <TableCell>{quote.text}</TableCell>
-        //               <TableCell>{quote.author}</TableCell>
-        //               <TableCell>
-        //                 {quote.approved ? (
-        //                   <Badge variant="default">Approved</Badge>
-        //                 ) : (
-        //                   <Badge variant="destructive">Pending</Badge>
-        //                 )}
-        //               </TableCell>
-        //               <TableCell>
-        //                 {!quote.approved && (
-        //                   <Button onClick={() => handleApproveQuote(quote.id)} variant="outline" size="sm">
-        //                     Approve
-        //                   </Button>
-        //                 )}
-        //                 <Button
-        //                   onClick={() => handleDeleteQuote(quote.id)}
-        //                   variant="outline"
-        //                   size="sm"
-        //                   className="ml-2"
-        //                 >
-        //                   Delete
-        //                 </Button>
-        //               </TableCell>
-        //             </TableRow>
-        //           ))}
-        //         </TableBody>
-        //       </Table>
-        //     </TabsContent>
-        //     <TabsContent value="new-quote">
-        //       <div className="grid gap-2">
-        //         <Label htmlFor="new-quote-text">Quote</Label>
-        //         <Textarea
-        //           id="new-quote-text"
-        //           value={newQuoteText}
-        //           onChange={(e) => setNewQuoteText(e.target.value)}
-        //           placeholder="Enter the new quote here..."
-        //           className="w-full"
-        //         />
-        //         <Label htmlFor="new-quote-author">Author</Label>
-        //         <Input
-        //           id="new-quote-author"
-        //           value={newQuoteAuthor}
-        //           onChange={(e) => setNewQuoteAuthor(e.target.value)}
-        //           placeholder="Enter the author's name..."
-        //           className="w-full"
-        //         />
-        //         <Button onClick={handleSubmitNewQuote} className="w-full">
-        //           Submit New Quote
-        //         </Button>
-        //       </div>
-        //     </TabsContent>
-        //   </Tabs>
-        // </div>
         <></>
       )}
       {!adminView && (
-        <div className="mt-4">
+        <div className="mt-4 z-50">
           <Button onClick={() => setAdminView(true)}>Admin Login</Button>
         </div>
       )}
       {adminView && (
-        <LoginModal />
-        // <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4">
-        //   <h2 className="text-xl font-bold mb-4">Admin Login</h2>
-        //   <div className="grid gap-2">
-        //     <Label htmlFor="admin-username">Username</Label>
-        //     <Input
-        //       id="admin-username"
-        //       value={adminUsername}
-        //       onChange={(e) => setAdminUsername(e.target.value)}
-        //       placeholder="Enter your username..."
-        //       className="w-full"
-        //     />
-        //     <Label htmlFor="admin-password">Password</Label>
-        //     <Input
-        //       id="admin-password"
-        //       type="password"
-        //       value={adminPassword}
-        //       onChange={(e) => setAdminPassword(e.target.value)}
-        //       placeholder="Enter your password..."
-        //       className="w-full"
-        //     />
-        //     <Button onClick={handleAdminLogin} className="w-full">
-        //       Login
-        //     </Button>
-        //   </div>
-        // </div>
+        <div className="flexflex-col w-full max-w-md justify-center items-center">
+          <LoginModal />
+        <Button onClick={() => setAdminView(false)} className="mt-4 bg-none h-8 float-end text-md flex gap-2"><img src="/icons/back.svg" className="w-8"/><p className="pr-5">Back</p></Button>
+        </div>
       )}
     </div>
   )
