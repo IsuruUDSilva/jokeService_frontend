@@ -101,7 +101,7 @@ const AdminView = ({
     };
 
     return (
-        <div className="flex flex-col items-end gap-4 ml-40 justify-center h-screen w-max relative">
+        <div className="flex flex-col items-end gap-4 ml-40 justify-center h-screen  w-full max-w-3xl relative">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl  bg-[#758694]">
                 <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
                 <Tabs defaultValue="quotes">
